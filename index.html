@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Level Up! Practice</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Student self-study version of the "Level Up" lesson (stereotypes, Bloom and Adichie).
+   8 steps, progress and drafts saved on this device. Light / dark shared with the Vocab Hub ("vocab-lab-mode"). */
+:root{
+  --bg:#f6f3ff; --surface:#ffffff; --sunk:#efebfb; --ink:#1d1a3a; --muted:#5d5a80; --bd:#e4e0f4;
+  --primary:#6d4cff; --on:#fff; --title:linear-gradient(100deg,#6d4cff,#e0559b 60%,#14a89a);
+  --blob1:#d9ccff; --blob2:#c6f0ea; --blob3:#ffd6e6; --ok:#0f7a4a; --okbg:#e3f6ec; --ko:#b3261e; --kobg:#fde8e7;
+  --b-bg:#E6F1FB; --b-fg:#0C447C; --b-ac:#378ADD;
+  --g-bg:#EAF3DE; --g-fg:#27500A; --g-ac:#639922;
+  --o-bg:#FAEEDA; --o-fg:#633806; --o-ac:#BA7517;
+  --p-bg:#EEEDFE; --p-fg:#3C3489; --p-ac:#7F77DD;
+  --r-bg:#FCEBEB; --r-fg:#791F1F; --r-ac:#E24B4A;
+  --display:"Outfit",system-ui,sans-serif; --body:"Atkinson Hyperlegible","Segoe UI",system-ui,sans-serif; --mono:"IBM Plex Mono",ui-monospace,monospace; --serif:Georgia,"Times New Roman",serif;
+}
+:root[data-theme="dark"]{
+  --bg:#0a0a18; --surface:#14142a; --sunk:#1d1d3a; --ink:#eef0ff; --muted:#a3a5cf; --bd:#2f2f5a;
+  --primary:#00e5ff; --on:#07071a; --title:linear-gradient(90deg,#00e5ff,#b26bff,#ff4d8d);
+  --blob1:rgba(178,107,255,.18); --blob2:rgba(0,229,255,.12); --blob3:transparent; --ok:#3dffa2; --okbg:#0f3326; --ko:#ff8a80; --kobg:#3a1414;
+  --b-bg:#0C447C; --b-fg:#cfe4fa; --b-ac:#85B7EB;
+  --g-bg:#27500A; --g-fg:#d6ebb4; --g-ac:#97C459;
+  --o-bg:#633806; --o-fg:#fcd99c; --o-ac:#EF9F27;
+  --p-bg:#3C3489; --p-fg:#dcd9fa; --p-ac:#AFA9EC;
+  --r-bg:#791F1F; --r-fg:#fbd3d3; --r-ac:#F09595; color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;font-family:var(--body);font-size:17px;line-height:1.55;color:var(--ink);min-height:100vh;
+  background:radial-gradient(40vw 40vw at 5% 5%,var(--blob1),transparent 70%),radial-gradient(45vw 45vw at 100% 30%,var(--blob2),transparent 70%),radial-gradient(50vw 40vw at 50% 110%,var(--blob3),transparent 70%),var(--bg);background-attachment:fixed}
+h1,h2,h3{font-family:var(--display);margin:0;letter-spacing:-.015em;line-height:1.15;text-wrap:balance}
+h1{font-size:2.2em;font-weight:800;background:var(--title);-webkit-background-clip:text;background-clip:text;color:transparent}
+h2{font-size:1.55em;font-weight:800}
+h3{font-size:1.1em;font-weight:600}
+p{margin:0}
+button{font:inherit;color:inherit;cursor:pointer}
+a{color:var(--primary)}
+:focus-visible{outline:3px solid var(--primary);outline-offset:3px}
+.eyebrow{font-family:var(--mono);font-size:.72em;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.muted{color:var(--muted)}
+.serif{font-family:var(--serif)}
+.wrap{max-width:980px;margin:0 auto;padding:22px 16px 120px;display:flex;flex-direction:column;gap:18px}
+
+.top{display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;align-items:flex-start}
+.top .t{display:flex;flex-direction:column;gap:6px}
+.topbtns{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.modetog{display:flex;border:1px solid var(--bd);border-radius:999px;background:var(--surface);padding:3px;gap:2px}
+.modetog button{border:0;background:none;border-radius:999px;padding:.25em .8em;font-weight:700;font-size:.85em;color:var(--muted)}
+.modetog button[aria-pressed="true"]{background:var(--primary);color:var(--on)}
+.pill{border:1px solid var(--bd);background:var(--surface);border-radius:999px;padding:.35em 1em;font-weight:700;font-size:.88em}
+.pill.main{background:var(--primary);color:var(--on);border-color:transparent}
+
+.steps{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;scrollbar-width:thin}
+.steps button{flex:none;display:flex;align-items:center;gap:6px;border:1px solid var(--bd);background:var(--surface);border-radius:999px;padding:.3em .85em;font-size:.82em;color:var(--muted);font-weight:700}
+.steps button .n{display:grid;place-items:center;width:1.6em;height:1.6em;border-radius:50%;background:var(--sunk);font-size:.85em}
+.steps button.done .n{background:var(--okbg);color:var(--ok)}
+.steps button.cur{border-color:var(--primary);color:var(--ink)}
+.steps button.cur .n{background:var(--primary);color:var(--on)}
+.bar{height:6px;border-radius:6px;background:var(--sunk);overflow:hidden}
+.bar i{display:block;height:100%;background:var(--title);transition:width .4s}
+
+.step{display:none;flex-direction:column;gap:16px;animation:in .35s ease}
+.step.cur{display:flex}
+@keyframes in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.card{background:var(--surface);border:1px solid var(--bd);border-radius:20px;padding:18px 20px;box-shadow:0 10px 28px rgba(70,40,160,.07)}
+.do{display:flex;gap:10px;align-items:flex-start;background:var(--sunk);border-radius:14px;padding:10px 14px;font-size:.95em}
+.do b{font-family:var(--display)}
+.a2{font-family:var(--serif);font-size:1.25em;border:2px dashed var(--bd);border-radius:16px;padding:14px 18px;background:var(--surface)}
+.sent{font-family:var(--serif);font-size:1.22em;line-height:1.85}
+
+mark{padding:.03em .25em;border-radius:.3em;box-decoration-break:clone;-webkit-box-decoration-break:clone;transition:opacity .3s}
+.b{background:var(--b-bg);color:var(--b-fg)}.g{background:var(--g-bg);color:var(--g-fg)}.o{background:var(--o-bg);color:var(--o-fg)}.p{background:var(--p-bg);color:var(--p-fg)}.r{background:var(--r-bg);color:var(--r-fg)}
+mark.new{animation:pop .6s ease}
+@keyframes pop{0%{transform:scale(.6);opacity:0}60%{transform:scale(1.12)}100%{transform:scale(1);opacity:1}}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font-size:.8em;font-weight:700;padding:.15em .7em;border-radius:999px}
+
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.btn{border:1px solid var(--bd);background:var(--surface);border-radius:12px;padding:.5em 1em;font-weight:700}
+.btn.main{background:var(--primary);color:var(--on);border-color:transparent}
+.btn:disabled{opacity:.45;cursor:default}
+
+.choice{display:flex;gap:8px;flex-wrap:wrap}
+.fb{border-radius:14px;padding:10px 14px;font-size:.95em}
+.fb.ok{background:var(--okbg);color:var(--ok)}
+.fb.ko{background:var(--kobg);color:var(--ko)}
+.fb.info{background:var(--sunk)}
+
+/* step 2: flip cards */
+.five{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,165px),1fr));gap:12px}
+.flip{border:3px solid var(--c);border-radius:18px;background:var(--surface);padding:14px;text-align:left;display:flex;flex-direction:column;gap:6px;min-height:170px}
+.flip .tag{align-self:flex-start;font-weight:800;font-size:.85em}
+.flip .back{display:none;font-size:.9em}
+.flip.open .back{display:flex;flex-direction:column;gap:4px}
+.flip.open .front-hint{display:none}
+.flip small{color:var(--muted)}
+
+/* step 3: build */
+.levels{display:flex;gap:6px}
+.lv{font-family:var(--display);font-weight:800;font-size:.85em;padding:.2em .8em;border-radius:999px;background:var(--sunk);color:var(--muted);transition:.3s}
+.lv.on{background:var(--ink);color:var(--surface)}
+.stage{display:none}.stage.cur{display:block}
+
+/* step 4 */
+.toggles button{border:2px solid transparent;border-radius:999px;padding:.3em 1em;font-weight:700}
+.toggles button[aria-pressed="false"]{background:var(--surface)!important;border-color:var(--bd);color:var(--muted)!important;text-decoration:line-through}
+#remSentence mark.off{opacity:.18;text-decoration:line-through}
+
+/* step 5: quiz */
+.qword{font-family:var(--serif);font-size:1.7em;text-align:center;padding:22px 10px}
+.cbtn{flex:1;min-width:92px;border:3px solid var(--c);border-radius:14px;padding:.55em .6em;font-weight:800;background:var(--surface)}
+.cbtn.right{background:var(--okbg);border-color:var(--ok)}
+.cbtn.wrong{background:var(--kobg);border-color:var(--ko)}
+.score{font-family:var(--display);font-weight:800;font-size:3em;text-align:center}
+
+/* step 6: spot */
+.seg{font:inherit;border:0;border-bottom:3px dashed var(--muted);background:none;padding:0 .1em;border-radius:.25em .25em 0 0;color:inherit}
+.seg.b,.seg.g,.seg.o,.seg.p,.seg.r{border-bottom-style:solid}
+.seg.b{border-bottom-color:var(--b-ac)}.seg.g{border-bottom-color:var(--g-ac)}.seg.o{border-bottom-color:var(--o-ac)}.seg.p{border-bottom-color:var(--p-ac)}.seg.r{border-bottom-color:var(--r-ac)}
+.seg.isok{box-shadow:0 0 0 2px var(--ok)}.seg.isko{box-shadow:0 0 0 2px var(--ko)}
+.palette{display:flex;gap:6px;flex-wrap:wrap}
+.palette button{border:3px solid var(--c);border-radius:999px;padding:.2em .9em;font-weight:800;background:var(--surface)}
+.palette button.sel{background:var(--c);color:#fff}
+
+/* step 7: workshop */
+.prompts{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,170px),1fr));gap:8px}
+.prompt{border:1px solid var(--bd);background:var(--surface);border-radius:14px;padding:10px 12px;text-align:left;font-size:.9em;display:flex;flex-direction:column;gap:2px}
+.prompt b{font-family:var(--display)}
+.prompt.sel{border:2px solid var(--primary)}
+.prompt .st{font-family:var(--mono);font-size:.72em;color:var(--muted)}
+textarea,input[type=text]{width:100%;font:inherit;font-family:var(--serif);font-size:1.12em;line-height:1.6;color:var(--ink);background:var(--surface);border:2px solid var(--bd);border-radius:14px;padding:12px 14px}
+textarea{min-height:150px;resize:vertical}
+textarea:focus,input:focus{outline:none;border-color:var(--primary)}
+.preview{font-family:var(--serif);font-size:1.12em;line-height:1.85;min-height:2em}
+.preview .up{text-decoration:underline wavy var(--ko);text-underline-offset:4px}
+.checks{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,170px),1fr));gap:8px}
+.chk{display:flex;gap:8px;align-items:center;border:2px solid var(--bd);border-radius:12px;padding:6px 10px;font-weight:700;font-size:.9em;background:var(--surface)}
+.chk .box{width:1.3em;height:1.3em;border-radius:6px;border:2px solid var(--c);display:grid;place-items:center;flex:none;font-size:.85em}
+.chk.on{border-color:var(--c)}.chk.on .box{background:var(--c);color:#fff}
+.meter{display:flex;align-items:center;gap:10px;font-family:var(--mono);font-size:.85em}
+.meter .bar{flex:1;max-width:260px}
+.hints{display:flex;flex-direction:column;gap:6px}
+.hintline{font-size:.92em}
+
+/* step 8 */
+.traps{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:10px}
+.trap{border:1px solid var(--bd);background:var(--surface);border-radius:14px;padding:12px 14px;text-align:left;display:flex;flex-direction:column;gap:4px}
+.trap .w{color:var(--ko)}.trap .c{color:var(--ok);display:none}.trap .why{display:none;font-size:.85em;color:var(--muted)}
+.trap.open .c,.trap.open .why{display:block}
+.trap.open .w{text-decoration:line-through}
+
+/* bottom nav + toolbox */
+.foot{position:fixed;left:0;right:0;bottom:0;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-top:1px solid var(--bd);z-index:5}
+.foot .in{max-width:980px;margin:0 auto;padding:10px 16px;display:flex;justify-content:space-between;align-items:center;gap:10px}
+#toolbox{position:fixed;top:0;right:0;bottom:0;width:min(420px,100%);background:var(--surface);border-left:1px solid var(--bd);box-shadow:-10px 0 30px rgba(0,0,0,.15);z-index:10;transform:translateX(105%);transition:transform .3s;display:flex;flex-direction:column}
+#toolbox.on{transform:none}
+#toolbox header{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;border-bottom:1px solid var(--bd)}
+.tabs{display:flex;gap:4px;padding:10px 16px 0;flex-wrap:wrap}
+.tabs button{border:2px solid var(--c);border-radius:999px;padding:.15em .8em;font-weight:800;font-size:.85em;background:var(--surface)}
+.tabs button[aria-selected="true"]{background:var(--c);color:#fff}
+#tbBody{overflow:auto;padding:12px 16px 30px;display:flex;flex-direction:column;gap:12px;font-size:.92em}
+#tbBody h3{font-size:.95em;margin-top:4px}
+.tw{display:flex;flex-wrap:wrap;gap:5px}
+.tw span{padding:.1em .55em;border-radius:.4em;font-size:.95em}
+.notice{font-size:.85em;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="t">
+      <span class="eyebrow">LLCER AMC · Stereotypes · Bloom &amp; Adichie</span>
+      <h1>Level Up! Practice</h1>
+      <p class="muted" style="max-width:58ch">Train on your own: learn how to turn a flat A2 sentence into a rich B2 sentence, in five colours.</p>
+    </div>
+    <div class="topbtns">
+      <div class="modetog" role="group" aria-label="Light or dark mode"><button data-mode-pick="light">☀️ Light</button><button data-mode-pick="dark">🌙 Dark</button></div>
+      <button class="pill main" id="openTb">🧰 Toolbox</button>
+    </div>
+  </header>
+  <nav class="steps" id="stepsNav" aria-label="Steps"></nav>
+  <div class="bar" aria-hidden="true"><i id="progBar" style="width:0"></i></div>
+
+  <main id="steps">
+
+  <!-- 1 -->
+  <section class="step" data-title="Why A2?">
+    <h2>My sentence is correct… so why is it A2?</h2>
+    <div class="do">🎯 <span><b>Today's mission:</b> understand what makes a sentence B2, then practise until you can do it alone. It takes about 30 minutes. Your answers are saved on this device.</span></div>
+    <p>Read this sentence carefully.</p>
+    <div class="a2">Stereotypes are bad. People think all Africans are poor. It is not true.</div>
+    <p><b>Question:</b> is there a grammar or spelling mistake in it?</p>
+    <div class="choice" id="q1"><button class="btn" data-a="yes">Yes, there is a mistake</button><button class="btn" data-a="no">No, it is correct</button></div>
+    <div id="q1fb"></div>
+  </section>
+
+  <!-- 2 -->
+  <section class="step" data-title="5 colours">
+    <h2>Five colours = five ways to level up</h2>
+    <div class="do">👆 <span><b>Tap each card</b> to discover what the colour does. Open all five!</span></div>
+    <div class="five" id="five"></div>
+    <div class="card" style="font-family:var(--display);font-weight:600;font-size:1.1em">A2 = one colour · B1 = two or three · <span style="background:var(--title);-webkit-background-clip:text;background-clip:text;color:transparent">B2 = all five, in the same sentence</span></div>
+  </section>
+
+  <!-- 3 -->
+  <section class="step" data-title="Watch it grow">
+    <div class="row" style="justify-content:space-between">
+      <h2>Level up, one colour at a time</h2>
+      <div class="levels"><span class="lv" data-lv="A2">A2</span><span class="lv" data-lv="B1">B1</span><span class="lv" data-lv="B2">B2</span></div>
+    </div>
+    <div class="do">▶️ <span>Before each click, <b>guess</b>: which words will change? Then press <b>Add a colour</b>.</span></div>
+    <div class="fb info" id="buildCap"></div>
+    <div class="card sent" id="build">
+      <div class="stage" data-lv="A2" data-cap="Our starting point: correct, but flat.">Stereotypes are bad. People think all Africans are poor. It is not true.</div>
+      <div class="stage" data-lv="A2" data-cap="<mark class='b'>+ Blue</mark> More precise words replace bad, think and not true.">Stereotypes are <mark class="b new">damaging</mark>. People <mark class="b new">assume</mark> all Africans are poor. It is <mark class="b new">inaccurate</mark>.</div>
+      <div class="stage" data-lv="B1" data-cap="<mark class='g'>+ Green</mark> Links show the logic between the ideas. We reach B1.">Stereotypes are <mark class="b">damaging</mark> <mark class="g new">because</mark> people <mark class="b">assume</mark> that all Africans are poor. <mark class="g new">However</mark>, this is <mark class="b">inaccurate</mark>.</div>
+      <div class="stage" data-lv="B1" data-cap="<mark class='o'>+ Orange</mark> An -ing subject and a relative clause (which) merge the ideas into one sentence.">
+        <mark class="o new">Assuming</mark> that all Africans live in poverty is <mark class="b">inaccurate</mark> and <mark class="b">damaging</mark>, <mark class="g">because</mark> it creates a cliché <mark class="o new">which</mark> <mark class="b">reduces individuals</mark> to one image.</div>
+      <div class="stage" data-lv="B2" data-cap="<mark class='p'>+ Purple</mark> Nuance: may, tends to. The sentence stops saying « all » and « always ».">
+        <mark class="g new">Although</mark> stereotypes <mark class="p new">may</mark> contain <mark class="b new">a grain of truth</mark>, <mark class="o">assuming</mark> that all Africans live in poverty is <mark class="b">inaccurate</mark> and <mark class="b">damaging</mark>, <mark class="g">because</mark> it creates a cliché <mark class="o">which</mark> <mark class="p new">tends to</mark> <mark class="b">reduce individuals</mark> to one image.</div>
+      <div class="stage" data-lv="B2" data-cap="<mark class='r'>+ Red</mark> The sources: Bloom and Adichie. All five colours are here: this is B2.">
+        <mark class="g">Although</mark> stereotypes <mark class="p">may</mark> contain <mark class="b">a grain of truth</mark>, <mark class="r new">as Paul Bloom argues</mark>, <mark class="o">assuming</mark> that all Africans live in poverty is <mark class="b">inaccurate</mark> and <mark class="b new">deeply damaging</mark>, <mark class="g">because</mark> it creates <mark class="r new">what Adichie calls a 'single story'</mark>, <mark class="o">which</mark> <mark class="p">tends to</mark> <mark class="b">reduce individuals</mark> to one image.</div>
+    </div>
+    <div class="chips" id="buildCount"></div>
+    <div class="row"><button class="btn" id="bBack">↺ Start again</button><button class="btn main" id="bAdd">+ Add a colour</button></div>
+  </section>
+
+  <!-- 4 -->
+  <section class="step" data-title="Switch off">
+    <h2>Switch a colour off… what do we lose?</h2>
+    <div class="do">🔦 <span>Tap a colour to switch it off. <b>Read the sentence again</b>: what is missing? Then check the explanation.</span></div>
+    <div class="row toggles" id="remToggles">
+      <button class="b" data-c="b" aria-pressed="true">Blue</button><button class="g" data-c="g" aria-pressed="true">Green</button><button class="o" data-c="o" aria-pressed="true">Orange</button><button class="p" data-c="p" aria-pressed="true">Purple</button><button class="r" data-c="r" aria-pressed="true">Red</button>
+    </div>
+    <div class="card sent" id="remSentence"></div>
+    <div id="remMsg"></div>
+  </section>
+
+  <!-- 5 -->
+  <section class="step" data-title="Quiz">
+    <h2>Which colour is it?</h2>
+    <div class="do">🧠 <span>Choose the right colour for each word or phrase. Read the explanation after each answer.</span></div>
+    <div class="card" id="quiz"></div>
+  </section>
+
+  <!-- 6 -->
+  <section class="step" data-title="Spot it">
+    <h2>Spot the colours in a B2 sentence</h2>
+    <div class="do">🔍 <span><b>Choose a colour</b>, then tap the underlined words that belong to it. When every part has a colour, press <b>Check</b>.</span></div>
+    <div class="palette" id="spotPal"></div>
+    <div class="card sent" id="spot"></div>
+    <div class="row"><button class="btn" id="spotReset">↺ Reset</button><button class="btn main" id="spotCheck">Check</button></div>
+    <div id="spotFb"></div>
+  </section>
+
+  <!-- 7 -->
+  <section class="step" data-title="Your turn">
+    <h2>Your turn: level it up!</h2>
+    <div class="do">✍️ <span><b>Pick a sentence</b>, then rewrite it as one or two B2 sentences (35 to 60 words) with all five colours. The robot below colours what it recognises. Need words? Open the <b>🧰 Toolbox</b>.</span></div>
+    <div class="prompts" id="prompts"></div>
+    <div class="card" style="display:flex;flex-direction:column;gap:12px">
+      <div id="ownWrap" style="display:none"><label class="eyebrow" for="ownA2">Your own A2 stereotype</label><input type="text" id="ownA2" placeholder="Example: Teenagers never read books."></div>
+      <div><span class="eyebrow">Starting point</span><div class="a2" id="curA2" style="margin-top:6px"></div></div>
+      <label class="eyebrow" for="draft">Your B2 version</label>
+      <textarea id="draft" spellcheck="true" placeholder="Start writing here…"></textarea>
+      <div class="meter"><span id="wc">0 words</span><span class="bar"><i id="wcBar" style="width:0"></i></span><span id="wcMsg" class="muted"></span></div>
+      <div><span class="eyebrow">The robot's colours</span><div class="preview card" id="preview" style="margin-top:6px;padding:12px 14px"></div>
+        <p class="notice" style="margin-top:6px">The robot only knows the words of the Toolbox: it can miss things or make mistakes. <span style="text-decoration:underline wavy var(--ko);text-underline-offset:4px">Wavy words</span> are A2 words to upgrade. You are the real judge!</p></div>
+      <div class="checks" id="checks"></div>
+      <div class="hints" id="hints"></div>
+      <div class="row">
+        <button class="btn" id="copyBtn">📋 Copy my sentence</button>
+        <button class="btn" id="modelBtn">💡 Show a model answer</button>
+      </div>
+      <div id="model"></div>
+    </div>
+  </section>
+
+  <!-- 8 -->
+  <section class="step" data-title="Traps">
+    <h2>Avoid the traps, then check your work</h2>
+    <div class="do">⚠️ <span>These mistakes pull a sentence back to A2. <b>Find the error</b> in each card, then tap to check.</span></div>
+    <div class="traps" id="traps"></div>
+    <div class="card" style="display:flex;flex-direction:column;gap:8px">
+      <h3>Before you post on the pad: self-check</h3>
+      <div id="self"></div>
+    </div>
+    <div class="card" style="display:flex;flex-direction:column;gap:8px">
+      <h3>🏁 Well done! What next?</h3>
+      <p>Learn the words of the five colours with flashcards and games in the <a id="vocabLink" target="_blank" rel="noopener">Level Up Vocab Lab</a>. Then come back to step 7 and try another sentence: practice makes perfect!</p>
+    </div>
+  </section>
+  </main>
+  <p class="notice">📱 Always use the same device and the same browser: your progress is saved here only.</p>
+</div>
+
+<div class="foot"><div class="in">
+  <button class="btn" id="prev">← Back</button>
+  <span class="eyebrow" id="stepLbl"></span>
+  <button class="btn main" id="next">Next →</button>
+</div></div>
+
+<aside id="toolbox" aria-label="Toolbox" aria-hidden="true">
+  <header><h3>🧰 Toolbox</h3><button class="btn" id="closeTb" aria-label="Close the toolbox">✕</button></header>
+  <div class="tabs" id="tbTabs" role="tablist"></div>
+  <div id="tbBody"></div>
+</aside>
+
+<script>
+/* ===================== SETTINGS ===================== */
+const VOCAB_LAB_URL="https://missdclassroom.github.io/TAMCVocabularyLearningStation26_27/levelup-vocab-lab.html";
+const KEY="levelup-practice-v1";
+
+const COL={b:{n:"Blue",what:"Precise words",ac:"var(--b-ac)"},g:{n:"Green",what:"Logical links",ac:"var(--g-ac)"},o:{n:"Orange",what:"Structures",ac:"var(--o-ac)"},p:{n:"Purple",what:"Nuance",ac:"var(--p-ac)"},r:{n:"Red",what:"Bloom & Adichie",ac:"var(--r-ac)"}};
+const K=Object.keys(COL);
+const mk=t=>t.replace(/\[([bgopr]):([^\]]+)\]/g,"<mark class='$1'>$2</mark>");
+const esc=t=>String(t).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const words=t=>(t.match(/[A-Za-zÀ-ÿ0-9'’-]+/g)||[]).length;
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+
+/* saved state */
+const fresh=()=>({step:0,seen:[],quizBest:null,drafts:{},own:"",prompt:"women"});
+let S=fresh();try{const s=JSON.parse(localStorage.getItem(KEY)||"null");if(s)S=Object.assign(fresh(),s)}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+
+/* ===================== STEPPER ===================== */
+const steps=$$(".step");
+function nav(){
+  $("#stepsNav").innerHTML=steps.map((s,i)=>`<button class="${i===S.step?"cur":""} ${S.seen.includes(i)&&i!==S.step?"done":""}" data-go="${i}"><span class="n">${S.seen.includes(i)&&i!==S.step?"✓":i+1}</span>${s.dataset.title}</button>`).join("");
+  steps.forEach((s,i)=>s.classList.toggle("cur",i===S.step));
+  $("#progBar").style.width=Math.round(S.seen.length/steps.length*100)+"%";
+  $("#stepLbl").textContent=`Step ${S.step+1} / ${steps.length}`;
+  $("#prev").disabled=S.step===0;
+  $("#next").textContent=S.step===steps.length-1?"Back to step 7 ↺":"Next →";
+  const cur=$("#stepsNav .cur");if(cur)cur.scrollIntoView({block:"nearest",inline:"center"});
+}
+function go(i){S.step=Math.max(0,Math.min(steps.length-1,i));if(!S.seen.includes(S.step))S.seen.push(S.step);save();nav();window.scrollTo({top:0,behavior:"smooth"})}
+$("#stepsNav").onclick=e=>{const b=e.target.closest("[data-go]");if(b)go(+b.dataset.go)};
+$("#prev").onclick=()=>go(S.step-1);
+$("#next").onclick=()=>go(S.step===steps.length-1?6:S.step+1);
+
+/* ===================== STEP 1 ===================== */
+$("#q1").onclick=e=>{const b=e.target.closest("[data-a]");if(!b)return;
+  $("#q1fb").innerHTML=b.dataset.a==="no"
+   ?`<div class="fb ok">✅ <b>Right!</b> No mistake at all. The problem is elsewhere: basic words, three short sentences, no link, no nuance, no source. It is correct… but <b>flat</b>. That is why it is A2.</div>`
+   :`<div class="fb ko">❌ <b>Look again:</b> grammar and spelling are fine! The problem is that the sentence is <b>flat</b>: basic words, short sentences, no link, no nuance, no source.</div>`;};
+
+/* ===================== STEP 2 ===================== */
+const FIVE={
+ b:["Say it more precisely.","bad → <i>harmful</i>, <i>misleading</i>","Use the Toolbox: words on the right of each line are stronger."],
+ g:["Show the logic between your ideas.","and, but → <i>whereas</i>, <i>therefore</i>","Contrast, concession, cause, consequence, addition."],
+ o:["Build longer, richer sentences.","two sentences → one with <i>which</i>","Relative clauses, -ing subject, passive (be seen as), What… is that…"],
+ p:["Avoid absolute statements.","are → <i>tend to be</i>","Not all, not always: may, arguably, to some extent."],
+ r:["Support your idea with a source.","I think → <i>as Adichie suggests</i>","Bloom or Adichie, in your own words."]};
+$("#five").innerHTML=K.map(k=>`<button class="flip" style="--c:${COL[k].ac}" data-k="${k}"><mark class="${k} tag">${COL[k].n}</mark><h3>${COL[k].what}</h3><span class="front-hint muted" style="font-size:.85em">Tap to open ▸</span><span class="back"><span>${FIVE[k][0]}</span><span>${FIVE[k][1]}</span><small>${FIVE[k][2]}</small></span></button>`).join("");
+$("#five").onclick=e=>{const f=e.target.closest(".flip");if(f)f.classList.toggle("open")};
+
+/* ===================== STEP 3 ===================== */
+let bs=0;const stages=$$("#build .stage");
+function buildRender(){
+  stages.forEach((s,i)=>s.classList.toggle("cur",i===bs));
+  const st=stages[bs];$$(".lv").forEach(l=>l.classList.toggle("on",l.dataset.lv===st.dataset.lv));
+  $("#buildCap").innerHTML=st.dataset.cap;
+  const c={};K.forEach(k=>c[k]=st.querySelectorAll("mark."+k).length);
+  $("#buildCount").innerHTML=K.map(k=>`<span class="chip ${k}" style="opacity:${c[k]?1:.35}">${COL[k].n} ×${c[k]}</span>`).join("")+`<span class="chip" style="background:var(--sunk)">${words(st.textContent)} words</span>`;
+  $("#bAdd").disabled=bs===stages.length-1;$("#bAdd").textContent=bs===stages.length-1?"✔ All five colours!":"+ Add a colour";
+}
+$("#bAdd").onclick=()=>{if(bs<stages.length-1){bs++;buildRender()}};
+$("#bBack").onclick=()=>{bs=0;buildRender()};
+
+/* ===================== STEP 4 ===================== */
+$("#remSentence").innerHTML=stages[stages.length-1].innerHTML.replace(/ new/g,"");
+const LOSE={b:"Without <b>blue</b>, the words become vague again. The sentence sounds like A2.",g:"Without <b>green</b>, the ideas are no longer connected: it becomes a list.",o:"Without <b>orange</b>, we are back to short, separate sentences.",p:"Without <b>purple</b>, the sentence becomes absolute: all, always… like a stereotype!",r:"Without <b>red</b>, the idea has no support: it is only your opinion."};
+$("#remToggles").onclick=e=>{const b=e.target.closest("button");if(!b)return;const on=b.getAttribute("aria-pressed")!=="true";b.setAttribute("aria-pressed",on);
+  $$("#remSentence mark."+b.dataset.c).forEach(m=>m.classList.toggle("off",!on));
+  const off=$$("#remToggles button[aria-pressed=false]").map(x=>x.dataset.c);
+  $("#remMsg").innerHTML=off.length?off.map(c=>`<div class="fb info" style="margin-bottom:6px">${LOSE[c]}</div>`).join(""):"";};
+
+/* ===================== STEP 5 ===================== */
+const Q=[["whereas","g","A link of contrast: <i>X, whereas Y</i>."],["to some extent","p","It limits your statement: that is nuance."],["to pigeonhole","b","A precise verb for « mettre dans une case »."],["As Bloom points out, …","r","You use a source to support your idea."],["Labelling teenagers as lazy is unfair.","o","An -ing form as the subject of the sentence: a B2 structure."],["therefore","g","A link of consequence."],["a sweeping generalisation","b","A precise expression for « une généralisation abusive »."],["a single story","r","Adichie's key idea."],["Adichie, whose roommate…","o","<i>whose</i> starts a relative clause."],["tend to","p","A tendency, not « always »."],["Admittedly, …","g","Concession: you grant a point before challenging it."],["misleading","b","More precise than « not true »."],["are often seen as","o","A passive structure: <i>be seen as</i>."],["arguably","p","« On peut soutenir que »: you soften your opinion."]];
+let qOrder=[],qi=0,qScore=0,qAnswered=false;
+function quizStart(){qOrder=shuffle(Q);qi=0;qScore=0;quizQ()}
+function quizQ(){
+  if(qi>=qOrder.length){
+    if(S.quizBest===null||qScore>S.quizBest){S.quizBest=qScore;save()}
+    const msg=qScore===qOrder.length?"Perfect! You know your colours. 🎉":qScore>=11?"Very good! Try again for a perfect score.":"Read the step 2 cards again, then try once more.";
+    $("#quiz").innerHTML=`<div class="score">${qScore} / ${qOrder.length}</div><p style="text-align:center">${msg}</p><p class="muted" style="text-align:center;font-size:.85em">Best score: ${S.quizBest} / ${qOrder.length}</p><div class="row" style="justify-content:center;margin-top:10px"><button class="btn main" id="qAgain">↺ Try again</button></div>`;
+    $("#qAgain").onclick=quizStart;return}
+  qAnswered=false;const [t]=qOrder[qi];
+  $("#quiz").innerHTML=`<div class="row" style="justify-content:space-between"><span class="eyebrow">Question ${qi+1} / ${qOrder.length}</span><span class="eyebrow">Score ${qScore}</span></div>
+   <div class="qword">${t}</div><div class="choice">${K.map(k=>`<button class="cbtn" style="--c:${COL[k].ac}" data-k="${k}">${COL[k].n}</button>`).join("")}</div><div id="qfb" style="margin-top:12px"></div>`;
+}
+$("#quiz").addEventListener("click",e=>{const b=e.target.closest(".cbtn");if(!b||qAnswered)return;qAnswered=true;
+  const [,c,why]=qOrder[qi];const ok=b.dataset.k===c;if(ok)qScore++;
+  b.classList.add(ok?"right":"wrong");if(!ok)$(`.cbtn[data-k="${c}"]`).classList.add("right");
+  $("#qfb").innerHTML=`<div class="fb ${ok?"ok":"ko"}">${ok?"✅ Yes!":"❌ It's <b>"+COL[c].n+"</b>."} ${why}</div><div class="row" style="justify-content:flex-end;margin-top:10px"><button class="btn main" id="qNext">Next question →</button></div>`;
+  $("#qNext").onclick=()=>{qi++;quizQ()};});
+
+/* ===================== STEP 6 ===================== */
+const SPOT="[g:Although] Parisians [o:are often seen as] [b:arrogant], this [b:widespread] cliché [p:arguably] says more about rushed tourists than about the people [o:who] live there; [g:therefore], [r:as Adichie suggests], a story told from a single point of view [p:tends to] give a [b:distorted] picture.";
+let spotSel="b";const spotAns=[];
+function spotBuild(){let n=0;spotAns.length=0;
+  $("#spot").innerHTML=SPOT.replace(/\[([bgopr]):([^\]]+)\]/g,(m,c,t)=>{spotAns.push(c);return`<button class="seg" data-i="${n++}">${t}</button>`});
+  $("#spotFb").innerHTML="";}
+$("#spotPal").innerHTML=K.map(k=>`<button style="--c:${COL[k].ac}" data-k="${k}" class="${k==="b"?"sel":""}">${COL[k].n}</button>`).join("");
+$("#spotPal").onclick=e=>{const b=e.target.closest("button");if(!b)return;spotSel=b.dataset.k;$$("#spotPal button").forEach(x=>x.classList.toggle("sel",x===b))};
+$("#spot").onclick=e=>{const s=e.target.closest(".seg");if(!s)return;s.classList.remove("isok","isko",...K);
+  if(s.dataset.c===spotSel){delete s.dataset.c}else{s.dataset.c=spotSel;s.classList.add(spotSel)}};
+$("#spotReset").onclick=spotBuild;
+$("#spotCheck").onclick=()=>{const segs=$$("#spot .seg");const empty=segs.filter(s=>!s.dataset.c).length;
+  if(empty){$("#spotFb").innerHTML=`<div class="fb ko">Give a colour to every underlined part first (${empty} left).</div>`;return}
+  let ok=0;segs.forEach((s,i)=>{const r=s.dataset.c===spotAns[i];if(r)ok++;s.classList.toggle("isok",r);s.classList.toggle("isko",!r)});
+  $("#spotFb").innerHTML=ok===segs.length?`<div class="fb ok">✅ Perfect: ${ok} / ${segs.length}! You can see all five colours in a B2 sentence.</div>`
+   :`<div class="fb ko">${ok} / ${segs.length}. Parts circled in red are wrong: change their colour and check again.</div>`;};
+
+/* ===================== STEP 7: WORKSHOP ===================== */
+const PROMPTS=[
+ {id:"women",topic:"Gender",a2:"Women are bad drivers. Men drive better.",
+  model:"[g:Although] women [o:are often seen as] [b:less competent] behind the wheel, this [b:widespread] [b:cliché] is [p:arguably] [b:unfounded], [g:since], [r:as Bloom points out], we should judge each driver as an [b:individual] rather than [b:lump] all women [b:together]."},
+ {id:"food",topic:"British food",a2:"British food is bad. It has no taste. Everybody says it.",
+  model:"[g:Although] British cuisine [o:is often seen as] [b:bland], this [b:widespread] [b:cliché] is [p:arguably] [b:outdated], [g:since] London now offers some of the most [b:diverse] restaurants in the world; [r:as Adichie suggests], a story repeated by tourists for decades is [r:incomplete] rather than entirely false, [p:should not necessarily] be trusted."},
+ {id:"influ",topic:"Influencers",a2:"Influencers are fake. They only want money. Their life is not real.",
+  model:"[g:Admittedly], [p:some] influencers [p:may] exaggerate their lives for money, [g:yet] [o:judging] them all by a few staged photos is [b:a sweeping generalisation]; [r:as Bloom points out], we should see each creator as an [b:individual], [g:since] [p:many] of them educate or inform millions of followers [o:who] trust them."},
+ {id:"sci",topic:"Scientists",a2:"Scientists are boring. They are old men in a lab. They have no social life.",
+  model:"The image of the scientist as a lonely old man in a white coat [p:tends to] [b:persist], [o:which] [b:discourages] [p:many] girls from considering a scientific career; [g:however], [r:as Adichie shows], such a [r:single story] [b:overlooks] the young, [b:sociable] researchers [o:who] work in teams every day."},
+ {id:"teach",topic:"Teachers",a2:"Teachers have too many holidays. They don't work a lot.",
+  model:"[g:Although] teachers [p:may] seem to enjoy long holidays, [o:assuming] that they hardly work is largely [b:unfounded], [g:since] lesson planning and marking [p:often] continue in the evenings; [r:as Bloom would argue], a [r:mental shortcut] based on the school calendar is no substitute for looking at what [b:individuals] actually do."},
+ {id:"own",topic:"Your own",a2:"",model:""}
+];
+const HINTS={
+ b:["harmful","misleading","unfounded","a sweeping generalisation","to lump together","to reduce… to","individuals","widespread"],
+ g:["although","whereas","admittedly… yet","therefore","since","which leads to","moreover"],
+ o:["are often seen as","-ing as a subject: Labelling…","who / which / whose","What… is that…","It is tempting to…"],
+ p:["may / might","tend to","arguably","to some extent","not necessarily","some / many"],
+ r:["as Bloom points out","Bloom argues that…","what Adichie calls a 'single story'","As Adichie suggests,…","incomplete rather than false"]};
+
+/* robot detector: [regex, colour]; earlier and longer matches win */
+const RX=[
+ [String.raw`(as|according to|in|from)\s+(paul\s+)?bloom('s)?(\s+(argues|suggests|points out|shows|warns|explains|stresses|would argue|reminds us( that)?|admits( that)?|perspective|terms|view))?`,"r"],
+ [String.raw`(as|according to|in|from)\s+(chimamanda\s+)?(ngozi\s+)?adichie('s)?(\s+(argues|suggests|points out|shows|warns|explains|stresses|would argue|reminds us( that)?|admits( that)?|calls|perspective|terms|view))?`,"r"],
+ [String.raw`bloom('s)?|adichie('s)?|single stor(y|ies)|incomplete|mental shortcuts?|shortcuts?`,"r"],
+ [String.raw`(is|are|be|been|being|was|were)\s+(often\s+|sometimes\s+|widely\s+|usually\s+)?(seen|regarded|considered|portrayed|viewed|described|labelled|perceived|thought of)\s+as`,"o"],
+ [String.raw`it\s+is\s+(tempting|unfair|wrong|easy|important|dangerous|absurd|unjust)\s+to`,"o"],
+ [String.raw`the\s+more\b`,"o"],
+ [String.raw`what\b[^.;]{1,50}?\b(is|was)\s+that`,"o"],
+ [String.raw`which\s+(leads|led)\s+to|which\s+explains\s+why|which\s+is\s+why|as\s+a\s+result|on\s+the\s+other\s+hand|what\s+is\s+more|not\s+only|but\s+also|even\s+(though|if)|in\s+other\s+words|for\s+(instance|example)|due\s+to|rather\s+than|such\s+as`,"g"],
+ [String.raw`although|whereas|while|however|yet|therefore|consequently|thus|hence|moreover|furthermore|admittedly|since|until|nevertheless|nonetheless`,"g"],
+ [String.raw`to\s+(some|a\s+certain)\s+extent|not\s+necessarily|in\s+some\s+cases|it\s+seems(\s+that)?|seems?\s+to|tends?\s+to|tended\s+to|(is|are)\s+likely\s+to|i\s+would\s+argue|in\s+my\s+view|not\s+all|a\s+minority\s+of|a\s+handful\s+of`,"p"],
+ [String.raw`may|might|could|arguably|likely|some|many|often|sometimes|partly|perhaps|probably|most|largely|mostly`,"p"],
+ [String.raw`who|whom|whose|which`,"o"],
+ [String.raw`a\s+sweeping\s+generali[sz]ations?|a\s+grain\s+of\s+truth|take[sn]?\s+for\s+granted|took\s+for\s+granted|lump(s|ed|ing)?\s+\w+\s+together|lump(s|ed|ing)?\s+together|break(s|ing)?\s+down|distorted\s+picture|deep-rooted|one-dimensional|old-fashioned|self-centred`,"b"],
+ [String.raw`harmful|damaging|devastating|unfair|exaggerated|inaccurate|misleading|distorted|unfounded|assum(e|es|ed|ption|ptions)|believe[sd]?|claim(s|ed)?|argue[sd]?|label(s|led|ling)?|categoris\w+|pigeonhol\w+|reduc(e|es|ed|ing|tive)|reveal\w*|reflect\w*|highlight\w*|illustrat\w+|fuel\w*|reinforc\w+|perpetuat\w+|challeng\w+|debunk\w*|simplistic|narrow|widespread|persistent|ingrained|individuals?|community|communities|generation|clichés?|cliches?|preconceptions?|prejudices?|bias(es)?|generali[sz]ations?|overlook\w*|deprived|disadvantaged|idle|unmotivated|elderly|seniors|outdated|threatening|stoic|gifted|talented|skilled|overweight|aggressive|hostile|ignorant|shallow|greedy|superficial|bland|dignity|diverse|competent|incompetent|persist\w*|sociable|stereotyp\w+`,"b"],
+ [String.raw`\w+ing`,"o-ing"]
+];
+const ING_STOP=/^(nothing|something|anything|everything|during|morning|evening|thing|king|bring|sing|ring|spring|wing|being|going|according|living|building|including)$/i;
+const BASIC=/^(bad|good|nice|think|thinks|say|says|very|big|stuff|things?|true|and|but|so|because)$/i;
+function detect(text){
+  const spans=[];
+  RX.forEach(([src,c],pri)=>{const re=new RegExp(`\\b(?:${src})\\b`,"gi");let m;
+    while((m=re.exec(text))){if(!m[0]){re.lastIndex++;continue}
+      if(c==="o-ing"){const prev=text.slice(0,m.index);const start=/(^|[.;:!?]\s*|^\s*)$/.test(prev)||/,\s*$/.test(prev);if(!start||ING_STOP.test(m[0]))continue;spans.push({s:m.index,e:m.index+m[0].length,c:"o",pri});continue}
+      spans.push({s:m.index,e:m.index+m[0].length,c,pri})}});
+  spans.sort((a,b)=>a.s-b.s||(b.e-b.s)-(a.e-a.s)||a.pri-b.pri);
+  const out=[];let end=-1;spans.forEach(sp=>{if(sp.s>=end){out.push(sp);end=sp.e}});return out;
+}
+function renderDetect(text){
+  const sp=detect(text);let html="",i=0;const found=new Set();
+  const plain=t=>esc(t).replace(/[A-Za-z']+/g,w=>BASIC.test(w)?`<span class="up">${w}</span>`:w);
+  sp.forEach(x=>{html+=plain(text.slice(i,x.s))+`<mark class="${x.c}">${esc(text.slice(x.s,x.e))}</mark>`;found.add(x.c);i=x.e});
+  html+=plain(text.slice(i));return{html:html.replace(/\n/g,"<br>"),found};
+}
+let manual={};
+function curPrompt(){return PROMPTS.find(p=>p.id===S.prompt)||PROMPTS[0]}
+function promptsRender(){
+  $("#prompts").innerHTML=PROMPTS.map(p=>{const d=(S.drafts[p.id]||"").trim();const w=words(d);
+    return`<button class="prompt ${p.id===S.prompt?"sel":""}" data-id="${p.id}"><b>${p.id==="own"?"✨ ":""}${p.topic}</b><span class="muted">${p.id==="own"?"Choose your own stereotype":esc(p.a2)}</span><span class="st">${w?`✎ ${w} words`:"Not started"}</span></button>`}).join("");
+}
+function workshop(){
+  const p=curPrompt();promptsRender();
+  $("#ownWrap").style.display=p.id==="own"?"block":"none";$("#ownA2").value=S.own||"";
+  $("#curA2").textContent=p.id==="own"?(S.own||"Write your A2 stereotype above."):p.a2;
+  $("#draft").value=S.drafts[p.id]||"";manual={};$("#model").innerHTML="";$("#modelBtn").dataset.force="";
+  $("#modelBtn").style.display=p.id==="own"?"none":"";
+  live();
+}
+function live(){
+  const t=$("#draft").value;const {html,found}=renderDetect(t);
+  $("#preview").innerHTML=t.trim()?html:`<span class="muted">Your colours will appear here as you type.</span>`;
+  const w=words(t);$("#wc").textContent=w+" words";
+  $("#wcBar").style.width=Math.min(100,w/60*100)+"%";
+  $("#wcMsg").textContent=w===0?"":w<35?"Target: 35 to 60 words":w<=60?"✔ Good length":"Too long: cut a little";
+  $("#checks").innerHTML=K.map(k=>{const on=found.has(k)||manual[k];return`<button class="chk ${on?"on":""}" style="--c:${COL[k].ac}" data-k="${k}" title="Tap to tick it yourself"><span class="box">${on?"✓":""}</span>${COL[k].n} · ${COL[k].what}</button>`}).join("");
+  const miss=K.filter(k=>!(found.has(k)||manual[k]));
+  $("#hints").innerHTML=t.trim()&&miss.length?miss.map(k=>`<div class="hintline"><mark class="${k}">${COL[k].n} missing?</mark> Try: ${HINTS[k].map(h=>`<i>${esc(h)}</i>`).join(" · ")}</div>`).join(""):(t.trim()?`<div class="fb ok">🎉 All five colours! Read your sentence aloud: is it clear and natural? Then check step 8.</div>`:"");
+}
+$("#prompts").onclick=e=>{const b=e.target.closest(".prompt");if(!b)return;S.prompt=b.dataset.id;save();workshop()};
+$("#draft").addEventListener("input",()=>{S.drafts[S.prompt]=$("#draft").value;save();live();promptsRender()});
+$("#ownA2").addEventListener("input",()=>{S.own=$("#ownA2").value;save();$("#curA2").textContent=S.own||"Write your A2 stereotype above."});
+$("#checks").onclick=e=>{const b=e.target.closest(".chk");if(!b)return;manual[b.dataset.k]=!manual[b.dataset.k];live()};
+$("#copyBtn").onclick=async()=>{const t=$("#draft").value.trim();if(!t)return;
+  try{await navigator.clipboard.writeText(t);$("#copyBtn").textContent="✔ Copied!"}catch(e){const ta=$("#draft");ta.select();try{document.execCommand("copy")}catch(_){}$("#copyBtn").textContent="✔ Selected: copy it"}
+  setTimeout(()=>$("#copyBtn").textContent="📋 Copy my sentence",1800)};
+$("#modelBtn").onclick=()=>{const p=curPrompt();const w=words($("#draft").value);
+  if(w<25&&!$("#modelBtn").dataset.force){$("#model").innerHTML=`<div class="fb info">✋ Try first! Write at least 25 words, then compare. Really stuck? Press the button again.</div>`;$("#modelBtn").dataset.force="1";return}
+  const c={};K.forEach(k=>c[k]=(p.model.match(new RegExp("\\["+k+":","g"))||[]).length);
+  $("#model").innerHTML=`<div class="card" style="background:var(--sunk);border:0;display:flex;flex-direction:column;gap:8px"><span class="eyebrow">One possible answer · yours can be different!</span><div class="sent">${mk(p.model)}</div><div class="chips">${K.map(k=>`<span class="chip ${k}">${COL[k].n} ×${c[k]}</span>`).join("")}<span class="chip" style="background:var(--surface)">${words(p.model.replace(/\[[bgopr]:([^\]]+)\]/g,"$1"))} words</span></div><p class="muted" style="font-size:.88em">Compare: which colours did you use differently? Steal one good idea, then improve your own version.</p></div>`;};
+
+/* ===================== STEP 8 ===================== */
+const TRAPS=[["People <b>is</b> unfair.","People <b>are</b> unfair.","« people » is plural."],["<b>The</b> teenagers are lazy. (in general)","Teenagers are lazy.","No « the » for a general idea."],["<b>According to me</b>, …","In my view / I would argue that …","« According to me » is a French calque."],["<b>Although</b> it is true, <b>but</b> …","Although it is true, …","Never « although… but » in the same sentence."],["<b>It exists</b> many stereotypes.","<b>There are</b> many stereotypes.","« il existe » = there is / there are."],["It <b>depends of</b> the person.","It <b>depends on</b> the person.","depend <b>on</b>."],["It makes people <b>to think</b> …","It makes people <b>think</b> …","make + someone + verb, without « to »."],["<b>Despite</b> they are rich, …","<b>Despite being</b> rich / <b>Although</b> they are rich","« despite » is followed by a noun or -ing."],["some <b>informations</b>","some <b>information</b>","« information » has no plural."],["a lot of <b>persons</b>","many <b>people</b>","The usual plural is « people »."]];
+$("#traps").innerHTML=TRAPS.map(([w,c,why])=>`<button class="trap"><span class="w">✗ ${w}</span><span class="c">✓ ${c}</span><span class="why">${why}</span></button>`).join("");
+$("#traps").onclick=e=>{const t=e.target.closest(".trap");if(t)t.classList.toggle("open")};
+const SELF=["All five colours are present.","One or two sentences, 35 to 60 words.","I adapted the Toolbox words: no copy and paste.","Every verb agrees with its subject.","It sounds natural when I read it aloud.","I can explain each colour."];
+$("#self").innerHTML=SELF.map((s,i)=>`<label class="chk" style="--c:var(--primary);cursor:pointer"><input type="checkbox" style="accent-color:var(--primary);width:1.2em;height:1.2em"> ${s}</label>`).join("");
+$("#vocabLink").href=VOCAB_LAB_URL;
+
+/* ===================== TOOLBOX ===================== */
+const TB={
+ b:[["Replace the basic word",[["bad","negative · unfair · harmful · damaging · devastating"],["not true","exaggerated · inaccurate · misleading · distorted · unfounded"],["think","believe · assume · take for granted"],["say","suggest · claim · argue"],["put in a box","label · pigeonhole · lump together · reduce to"],["make (worse)","fuel · reinforce · perpetuate"],["fight","question · challenge · break down"],["common","widespread · persistent · deep-rooted"],["people","individuals · a whole group · a generation"],["idea","assumption · cliché · preconception · prejudice · bias"]]],
+    ["Power phrases",[["","a sweeping generalisation · a grain of truth · to jump to conclusions · to judge a book by its cover · to see someone as an individual · to give a distorted picture of"]]]],
+ g:[["Connect your ideas",[["Contrast","whereas · while · however · yet · on the other hand"],["Concession","although · even though · admittedly · it is true that… but"],["Cause","since · as · because of · due to"],["Consequence","therefore · as a result · which leads to · which explains why"],["Addition","moreover · what is more · not only… but also"],["Example","for instance · such as"]]]],
+ o:[["Build richer sentences",[["Relative clause","Stereotypes, which are often repeated by the media, …"],["-ing as subject","Labelling all teenagers as lazy is unfair."],["Passive","Footballers are often regarded as shallow."],["What-cleft","What Adichie shows is that …"],["It is + adj + to","It is tempting to believe that …"],["The more…, the more…","The more a story is repeated, the more it seems true."]]]],
+ p:[["Avoid absolute statements",[["Modal verbs","may · might · can · could"],["Tendency","tend to · are likely to · are often · seem to"],["Quantity","some · many · a minority of · not all"],["Degree","to some extent · partly · in some cases · not necessarily"],["Opinion","arguably · it seems that · I would argue that · in my view"]]]],
+ r:[["Chimamanda Ngozi Adichie",[["Idea","When we hear only one story about a group, it becomes the only story."],["Idea","Stereotypes are not completely false: they are incomplete."],["Idea","Power decides who tells the story."],["Frames","As Adichie suggests, … · This is what Adichie calls a 'single story'. · Adichie warns us that …"]]],
+    ["Paul Bloom",[["Idea","Prejudice is natural: our brain uses generalisations as shortcuts."],["Idea","Some stereotypes may contain a grain of truth."],["Idea","When we know an individual, we should judge the person, not the group."],["Frames","Bloom argues that … · As Bloom points out, … · From Bloom's perspective, …"]]]]};
+let tbTab="b";
+function tbRender(){
+  $("#tbTabs").innerHTML=K.map(k=>`<button role="tab" aria-selected="${k===tbTab}" style="--c:${COL[k].ac}" data-k="${k}">${COL[k].n}</button>`).join("");
+  $("#tbBody").innerHTML=TB[tbTab].map(([h,rows])=>`<h3><mark class="${tbTab}">${h}</mark></h3>`+rows.map(([a,b])=>`<div>${a?`<b>${a}</b> → `:""}<span>${b}</span></div>`).join("")).join("");
+}
+$("#tbTabs").onclick=e=>{const b=e.target.closest("button");if(b){tbTab=b.dataset.k;tbRender()}};
+const tb=on=>{$("#toolbox").classList.toggle("on",on);$("#toolbox").setAttribute("aria-hidden",!on)};
+$("#openTb").onclick=()=>tb(true);$("#closeTb").onclick=()=>tb(false);
+document.addEventListener("keydown",e=>{if(e.key==="Escape")tb(false)});
+
+/* ===================== LIGHT / DARK (shared with the Vocab Hub) ===================== */
+function applyMode(m,store){document.documentElement.dataset.theme=m;if(store){try{localStorage.setItem("vocab-lab-mode",m)}catch(e){}}$$("[data-mode-pick]").forEach(b=>b.setAttribute("aria-pressed",b.dataset.modePick===m))}
+let mode=null;try{mode=localStorage.getItem("vocab-lab-mode")}catch(e){}
+if(mode!=="light"&&mode!=="dark")mode=(window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches)?"dark":"light";
+document.addEventListener("click",e=>{const b=e.target.closest("[data-mode-pick]");if(b)applyMode(b.dataset.modePick,true)});
+applyMode(mode,false);
+
+/* ===================== START ===================== */
+buildRender();quizStart();spotBuild();workshop();tbRender();go(S.step);
+</script>
+</body>
+</html>
